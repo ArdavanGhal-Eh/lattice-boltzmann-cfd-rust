@@ -1,0 +1,15 @@
+[package]
+name = "lattice-boltzmann-cfd-rust"
+version = "0.1.0"
+edition = "2021"
+authors = ["Ardavan Ghal-Eh <ardavang2007@gmail.com>"]
+description = "High-Performance 2D Lattice Boltzmann (LBM D2Q9) Flow & Aerodynamic Drag Simulator in Rust"
+license = "MIT"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+[lib]
+name = "lbm_solver"
+crate-type = ["cdylib", "rlib"]
