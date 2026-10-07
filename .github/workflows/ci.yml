@@ -1,0 +1,32 @@
+name: Rust Lattice Boltzmann CFD CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set up Rust Toolchain
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        components: clippy, rustfmt
+
+    - name: Check Formatting
+      run: cargo fmt --check
+
+    - name: Run Clippy Linter
+      run: cargo clippy -- -D warnings
+
+    - name: Run Cargo Test Suite
+      run: cargo test --verbose
+
+    - name: Run CFD Simulation Benchmark
+      run: cargo run --release
