@@ -89,14 +89,17 @@ impl ThermalLbmSolver {
                     let src_y = (y as i32 - CY[i] + ny as i32) as usize % ny;
                     let src_cell = src_y * nx + src_x;
 
+                    let dest_idx = self.idx(x, y, i);
                     if obstacles[cell] {
                         // Heated obstacle surface (Dirichlet condition)
-                        self.g[self.idx(x, y, i)] = Self::thermal_equilibrium(t_hot_cylinder, 0.0, 0.0, i);
+                        self.g[dest_idx] = Self::thermal_equilibrium(t_hot_cylinder, 0.0, 0.0, i);
                     } else if obstacles[src_cell] {
                         let opp = OPPOSITE[i];
-                        self.g[self.idx(x, y, i)] = self.g_post[self.idx(x, y, opp)];
+                        let src_idx = self.idx(x, y, opp);
+                        self.g[dest_idx] = self.g_post[src_idx];
                     } else {
-                        self.g[self.idx(x, y, i)] = self.g_post[self.idx(src_x, src_y, i)];
+                        let src_idx = self.idx(src_x, src_y, i);
+                        self.g[dest_idx] = self.g_post[src_idx];
                     }
                 }
             }
