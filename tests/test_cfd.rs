@@ -1,4 +1,4 @@
-use lattice_boltzmann_cfd_rust::{
+use lbm_solver::{
     equilibrium, NacaAirfoil, LbmSolver, ThermalLbmSolver, WEIGHTS, CX, CY, NUM_DIRECTIONS
 };
 
@@ -7,8 +7,8 @@ fn test_d2q9_weights_and_moments() {
     let weight_sum: f64 = WEIGHTS.iter().sum();
     assert!((weight_sum - 1.0).abs() < 1e-6);
 
-    let mut first_moment_x = 0.0;
-    let mut first_moment_y = 0.0;
+    let mut first_moment_x: f64 = 0.0;
+    let mut first_moment_y: f64 = 0.0;
     for i in 0..NUM_DIRECTIONS {
         first_moment_x += WEIGHTS[i] * (CX[i] as f64);
         first_moment_y += WEIGHTS[i] * (CY[i] as f64);
@@ -19,13 +19,13 @@ fn test_d2q9_weights_and_moments() {
 
 #[test]
 fn test_equilibrium_conservation() {
-    let rho = 1.25;
-    let ux = 0.10;
-    let uy = -0.05;
+    let rho: f64 = 1.25;
+    let ux: f64 = 0.10;
+    let uy: f64 = -0.05;
 
-    let mut sum_feq = 0.0;
-    let mut sum_feq_mx = 0.0;
-    let mut sum_feq_my = 0.0;
+    let mut sum_feq: f64 = 0.0;
+    let mut sum_feq_mx: f64 = 0.0;
+    let mut sum_feq_my: f64 = 0.0;
 
     for i in 0..NUM_DIRECTIONS {
         let feq = equilibrium(rho, ux, uy, i);
