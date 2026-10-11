@@ -110,8 +110,9 @@ impl LbmSolver {
                 // BGK Relaxation
                 for i in 0..NUM_DIRECTIONS {
                     let feq = equilibrium(rho, ux, uy, i);
-                    let fi = self.f[self.idx(x, y, i)];
-                    self.f_post[self.idx(x, y, i)] = fi - omega * (fi - feq);
+                    let cell_idx = self.idx(x, y, i);
+                    let fi = self.f[cell_idx];
+                    self.f_post[cell_idx] = fi - omega * (fi - feq);
                 }
             }
         }
