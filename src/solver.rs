@@ -129,24 +129,29 @@ impl LbmSolver {
                     let src_y = (y as i32 - CY[i] + ny as i32) as usize % ny;
                     let src_cell = src_y * nx + src_x;
 
+                    let dest_idx = self.idx(x, y, i);
                     if self.obstacles[src_cell] {
                         // Bounce-back boundary condition
                         let opp = OPPOSITE[i];
-                        let val = self.f_post[self.idx(x, y, opp)];
-                        self.f[self.idx(x, y, i)] = val;
+                        let opp_idx = self.idx(x, y, opp);
+                        let val = self.f_post[opp_idx];
+                        self.f[dest_idx] = val;
 
                         // Momentum exchange force calculation
-                        fx_drag += (CX[i] as f64) * (self.f_post[self.idx(x, y, opp)] + val);
-                        fy_lift += (CY[i] as f64) * (self.f_post[self.idx(x, y, opp)] + val);
+                        fx_drag += (CX[i] as f64) * (self.f_post[opp_idx] + val);
+                        fy_lift += (CY[i] as f64) * (self.f_post[opp_idx] + val);
                     } else {
-                        self.f[self.idx(x, y, i)] = self.f_post[self.idx(src_x, src_y, i)];
+                        let src_idx = self.idx(src_x, src_y, i);
+                        self.f[dest_idx] = self.f_post[src_idx];
                     }
                 }
 
                 // Inflow boundary (Dirichlet velocity on left wall)
                 if x == 0 {
+                    let u_in = self.u_inlet;
                     for i in 0..NUM_DIRECTIONS {
-                        self.f[self.idx(x, y, i)] = equilibrium(1.0, self.u_inlet, 0.0, i);
+                        let idx_val = self.idx(x, y, i);
+                        self.f[idx_val] = equilibrium(1.0, u_in, 0.0, i);
                     }
                 }
             }

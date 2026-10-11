@@ -74,8 +74,9 @@ impl ThermalLbmSolver {
 
                 for i in 0..NUM_DIRECTIONS {
                     let geq = Self::thermal_equilibrium(t_val, ux, uy, i);
-                    let gi = self.g[self.idx(x, y, i)];
-                    self.g_post[self.idx(x, y, i)] = gi - omega_t * (gi - geq);
+                    let idx_val = self.idx(x, y, i);
+                    let gi = self.g[idx_val];
+                    self.g_post[idx_val] = gi - omega_t * (gi - geq);
                 }
             }
         }
