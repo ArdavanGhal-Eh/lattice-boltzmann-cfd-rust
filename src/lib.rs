@@ -1,3 +1,5 @@
+#![allow(clippy::needless_range_loop)]
+
 pub mod lattice;
 pub mod solver;
 pub mod thermal;
